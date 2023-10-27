@@ -9,9 +9,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import axios from "axios";
 
-import {ToastContainer, toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const Crud = () => {
   const [show, setShow] = useState(false);
@@ -28,9 +27,9 @@ export const Crud = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    getData()
+    getData();
   }, []);
-
+  //get
   const getData = () => {
     axios
       .get("http://localhost:5196/api/Employee")
@@ -43,112 +42,105 @@ export const Crud = () => {
   };
 
   const handleEdit = (id) => {
-
     handleShow();
-    axios.get(`http://localhost:5196/api/Employee/Employee?id=${id}`)
-    .then((result)=>{
-      setEditName(result.data.name);
-      setEditAge(result.data.age);
-      setEditIsActive(result.data.isActive);
-      seteditId(id)
-    })
-    .catch((error)=>{
-      toast.error(error)
-    })
-
-
+    axios
+      .get(`http://localhost:5196/api/Employee/Employee?id=${id}`)
+      .then((result) => {
+        setEditName(result.data.name);
+        setEditAge(result.data.age);
+        setEditIsActive(result.data.isActive);
+        seteditId(id);
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
   };
+
   const handleDelete = (id) => {
     if (window.confirm("Are you sure to delete?") === true) {
-        axios.delete(`http://localhost:5196/api/Employee?id=${id}`)
-        .then((result)=>{
-          
-          if(result.status===200){
-            
-            toast.success('Data has beem Deleted Successfully');
+      axios
+        .delete(`http://localhost:5196/api/Employee?id=${id}`)
+        .then((result) => {
+          if (result.status === 200) {
+            toast.success("Data has beem Deleted Successfully");
             getData();
           }
-         
         })
-        .catch((error)=>{
-          toast.error(error)
-        })
-        
+        .catch((error) => {
+          toast.error(error);
+        });
     }
   };
 
-  const handleSubmit =()=>{
-
-    const url = 'http://localhost:5196/api/Employee';
+  const handleSubmit = () => {
+    const url = "http://localhost:5196/api/Employee";
     const data = {
-        name: name,
-        age: age,
-        isActive: isActive
-    }
-    axios.post(url,data)
-    .then((result)=>{
+      name: name,
+      age: age,
+      isActive: isActive,
+    };
+    axios
+      .post(url, data)
+      .then((result) => {
         getData(data);
         clear();
-        toast.success('Data added Successfully')
-    })
-    .catch((error)=>{
-      toast.success(error)
-    })
-  }
-
-
-  const clear = ()=>{
-    setName('');
-    setAge('');
-    setIsActive(0);
-    setEditName('');
-    setEditAge('');
-    setEditIsActive(0);
-    seteditId('');
-  }
-
-  const handleUpdate = () => {
-    const url = (`http://localhost:5196/api/Employee/${editId}`)
-    const data = {
-      id:editId,
-      name: editName,
-      age: editAge,
-      isActive: editIsActive
-  }
-  axios.put(url,data)
-  .then((result)=>{
-    handleClose();
-      getData(data);
-      clear();
-      toast.success('Data Updated Successfully')
-  })
-  .catch((error)=>{
-    toast.success(error)
-  })
+        toast.success("Data added Successfully");
+      })
+      .catch((error) => {
+        toast.success(error);
+      });
   };
 
-  const handleIsActive = (e)=>{
-      if(e.target.checked){
-        setIsActive(1)
-      }
-      else{
-        setIsActive(0)
-      }
-  }
+  const clear = () => {
+    setName("");
+    setAge("");
+    setIsActive(0);
+    setEditName("");
+    setEditAge("");
+    setEditIsActive(0);
+    seteditId("");
+  };
 
-  const handleIsEditActive = (e)=>{
-    if(e.target.checked){
-      setEditIsActive(1)
-    }
-    else{
-      setEditIsActive(0)
-    }
-}
+  const handleUpdate = () => {
+    const url = `http://localhost:5196/api/Employee/${editId}`;
+    const data = {
+      id: editId,
+      name: editName,
+      age: editAge,
+      isActive: editIsActive,
+    };
+    axios
+      .put(url, data)
+      .then((result) => {
+        handleClose();
+        getData(data);
+        clear();
+        toast.success("Data Updated Successfully");
+      })
+      .catch((error) => {
+        toast.success(error);
+      });
+  };
 
+  const handleIsActive = (e) => {
+    if (e.target.checked) {
+      setIsActive(1);
+    } else {
+      setIsActive(0);
+    }
+  };
+
+  const handleIsEditActive = (e) => {
+    if (e.target.checked) {
+      setEditIsActive(1);
+    } else {
+      setEditIsActive(0);
+    }
+  };
 
   return (
     <>
-    <ToastContainer/>
+      <ToastContainer />
       <br></br>
       <Container>
         <Row>
@@ -157,11 +149,8 @@ export const Crud = () => {
               type="text"
               className="form-control"
               placeholder="Enter Name"
-              v
-              alue={name}
-              onChange={(e) => (
-                setName(e.target.value)
-              )}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </Col>
           <Col>
@@ -170,9 +159,7 @@ export const Crud = () => {
               className="form-control"
               placeholder="Enter Age"
               value={age}
-              onChange={(e) => (
-                setAge(e.target.value)
-              )}
+              onChange={(e) => setAge(e.target.value)}
             />
           </Col>
           <Col>
@@ -185,7 +172,9 @@ export const Crud = () => {
             <label>IsActive</label>
           </Col>
           <Col>
-            <button className="btn btn-primary" onClick={()=>handleSubmit()}>Submit</button>
+            <button className="btn btn-primary" onClick={() => handleSubmit()}>
+              Submit
+            </button>
           </Col>
         </Row>
       </Container>
@@ -243,8 +232,7 @@ export const Crud = () => {
                 type="text"
                 className="form-control"
                 placeholder="Enter Name"
-                v
-                alue={editName}
+                value={editName}
                 onChange={(e) => setEditName(e.target.value)}
               />
             </Col>
@@ -266,9 +254,6 @@ export const Crud = () => {
               />
               <label>IsActive</label>
             </Col>
-            <Col>
-              <button className="btn btn-primary">Update</button>
-            </Col>
           </Row>
         </Modal.Body>
         <Modal.Footer>
@@ -276,7 +261,7 @@ export const Crud = () => {
             Close
           </Button>
           <Button variant="primary" onClick={() => handleUpdate()}>
-            Save Changes
+            Update
           </Button>
         </Modal.Footer>
       </Modal>
